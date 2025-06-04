@@ -2,13 +2,15 @@
 ## 画面設計
 ### 画面レイアウト
 #### マネジメント画面#1
-![マネジメント画面.jpg](マネジメント画面.jpg)
+![マネジメント画面.png](マネジメント画面.png)
 
 #### データ入力画面#2
-イベント入力画面#2-1,メールデータ入力画面#2-2,ファイルデータ入力画面#2-3
-![データ入力画面\_イベント.jpg](データ入力画面_イベント.jpg)
-![データ入力画面\_書類\_メール.jpg](データ入力画面_書類_メール.jpg)
-![データ入力画面\_書類\_申請書類.jpg](データ入力画面_書類_申請書類.jpg)
+イベント入力画面、メールデータ入力画面、ファイルデータ入力画面、ファイルデータ入力画面、ファイルデータ入力画面
+![データ入力画面\1.png](データ入力画面1.png)
+![データ入力画面\2.png](データ入力画面2.png)
+![データ入力画面\3.png](データ入力画面3.png)
+![データ入力画面\4.png](データ入力画面4.png)
+![データ入力画面\5.png](データ入力画面5.png)
 
 #### フォーマット作成画面#3
 ![フォーマット作成画面.jpg](フォーマット作成画面.jpg)
@@ -29,7 +31,8 @@
     - 画面上部のラジオボタンににて#2-2に遷移
 - 書類（メール）入力画面(#2-2)
     -  ラジオボタンの下のボタンにて#2-3に遷移
-- 書類（ファイル）入力画面(#2-3)
+- 書類（申請書類・連絡）入力画面(#2-3,2-4)
+- 新規会場登録画面(#2-5)
 
 ### 入出力項目定義
 #### イベントデータ入力画面#2-1
@@ -89,7 +92,7 @@
     - 上限なし
 - ファイル
     - テキストフィールド　100文字程度？
-#### フォーマット作成ツール#3
+#### フォーマット作成画面#3
 **項目**
 - よく利用するフォーマットボタン（任意）
     - メール
@@ -114,7 +117,6 @@
 - イベント名：title :number 
 - イベントの開催日：held_on :date 
 - 会場ID：venue_id :number 
-- 自治体ID：municipality_id :number 
 - 備考：input_text :string 
 
 **Response**
@@ -133,14 +135,13 @@
 - イベント名：title :number 
 - イベントの開催日：held_on :date 
 - 会場ID：venue_id :number 
-- 自治体ID：municipality_id :number 
 - 備考：input_text :string 
 
 **Response**
 - 200 OK
     - Message：登録成功
 - 400 BadRequest
-    - 会場、自治体IDが不正
+    - 会場IDが不正
     - 返却データなし
 - 500 BadRequest
     - DBサーバがダウンしている
@@ -158,7 +159,7 @@
 - 200 OK
     - Message：登録成功
 - 400 BadRequest
-    - 会場、自治体IDが不正
+    - 会場IDが不正
     - 返却データなし
 - 500 BadRequest
     - DBサーバがダウンしている
@@ -199,21 +200,13 @@ ragが考案したフォーマットを出力する
   -  サーバーエラー 
 ## データモデル設計
 ### テーブル設計
-
 ```mermaid
 erDiagram
-MUNICIPALITY {
-    int id PK "自治体ID"
-    string name "自治体名"
-    string region "地域/都道府県"
-  }
-
   VENUE {
     int id PK "会場ID"
     string name "会場名"
     string address "住所"
     int capacity "最大収容人数"
-    int municipality_id FK "自治体ID"
   }
 
   EVENT {
@@ -221,7 +214,6 @@ MUNICIPALITY {
     string title "イベント名"
     date held_on "開催日"
     int venue_id FK "会場ID"
-    int municipality_id FK "自治体ID"
     string description "概要"
   }
 
@@ -250,8 +242,6 @@ MUNICIPALITY {
     string content_text "連絡文"
   }
 
-  MUNICIPALITY ||--|{ VENUE      : has
-  MUNICIPALITY ||--|{ EVENT      : hosts
   VENUE        ||--|{ EVENT      : "is venue for"
   EVENT        ||--|{ APPLICATION : receives
   EVENT        ||--|{ PROMOTION   : "promotes via"
