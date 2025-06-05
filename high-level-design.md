@@ -122,6 +122,7 @@
 #### 候補日ボタン押下
 ##### GET /input/event
 イベントのRagに情報を入力し、DBに登録する。 
+
 **Request**
 - イベント名：title :number 
 - イベントの開催日：held_on :date 
@@ -140,6 +141,7 @@
 
 ##### GET /input/mail
 イベントのRagに情報を入力し、DBに登録する。 
+
 **Request**
 - イベント名：title :number 
 - イベントの開催日：held_on :date 
@@ -157,6 +159,7 @@
     - 返却データなし   
 
 ##### GET /input/file
+
 **Request**
 - タイトル名：file_title :string
 - 宛先：adress :string 
@@ -175,6 +178,7 @@
     - 返却データなし   
 
 ##### GET /input/venue
+
 **Request**
 - タイトル名：file_title :string
 - 宛先：adress :string 
@@ -194,6 +198,7 @@
 
 ##### GET /setting
 DBからragがイベントの候補日、開催地、予算、イベント名と詳細を提案する。 
+
 **Request**
 - 予算希望：number[0, inf] 
 - 日時希望： date、今日以降 
@@ -213,6 +218,7 @@ DBからragがイベントの候補日、開催地、予算、イベント名と
 
 ##### GET /format
 ragが考案したフォーマットを出力する。
+
 **Request**
  - 利用するフォーマット（メール・申請書類・連絡・null）:　string 
  - 類似した過去の資料を提案：AIが必要だと判断したキーワードから検索する。
