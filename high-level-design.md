@@ -52,23 +52,6 @@
     - 0以上
 - 開催日
     - 今日以前
-#### イベントデータ入力画面#2-1
-**項目**
-- イベント名 [必須]
-    - 1行のテキストボックス
-- 開催日 [必須]
-    - YYYY/MM/DD形式
-- 来場者数
-    - number形式
-    - 上限なし
-- 補足
-    - テキストフィールド　100文字程度？
-
-**バリデーション**
-- 来場者数
-    - 0以上
-- 開催日
-    - 今日以前
 
 #### メールデータ入力画面#2-2
 **項目**
@@ -81,6 +64,7 @@
     - 上限なし
 - ファイル
     - テキストフィールド　100文字程度？
+
 #### ファイルデータ入力画面#2-3
 **項目**
 - タイトル名 [必須]
@@ -92,6 +76,31 @@
     - 上限なし
 - ファイル
     - テキストフィールド　100文字程度？
+
+#### ファイルデータ入力画面#2-4
+**項目**
+- タイトル名 [必須]
+    - 1行のテキストボックス
+- 宛先[必須]
+    - string
+- 内容[必須]
+    - number形式
+    - 上限なし
+- ファイル
+    - テキストフィールド　100文字程度？
+
+#### ファイルデータ入力画面#2-5
+**項目**
+- タイトル名 [必須]
+    - 1行のテキストボックス
+- 宛先[必須]
+    - string
+- 内容[必須]
+    - number形式
+    - 上限なし
+- ファイル
+    - テキストフィールド　100文字程度？
+
 #### フォーマット作成画面#3
 **項目**
 - よく利用するフォーマットボタン（任意）
@@ -152,6 +161,24 @@
 - タイトル名：file_title :string
 - 宛先：adress :string 
 - 本文：content :string 
+- ファイル： file_url: s3で管理
+- 備考：input_text :string 
+
+**Response**
+- 200 OK
+    - Message：登録成功
+- 400 BadRequest
+    - 会場IDが不正
+    - 返却データなし
+- 500 BadRequest
+    - DBサーバがダウンしている
+    - 返却データなし   
+
+##### GET /input/venue
+**Request**
+- タイトル名：file_title :string
+- 宛先：adress :string 
+- 本文：content :string 
 - ファイル： :file 
 - 備考：input_text :string 
 
@@ -185,19 +212,20 @@ DBからragがイベントの候補日、開催地、予算、イベント名と
   - 返却データなし 
 
 ##### GET /format
-ragが考案したフォーマットを出力する
+ragが考案したフォーマットを出力する。
  **Request**
  - 利用するフォーマット（メール・申請書類・連絡・null）:　string 
- - 類似した過去の資料を提案：AIが必要だと判断したキーワードから検索する   
- - AIとチャット：string（利用するフォーマットが含まれる場合も） 
- **Response**
+ - 類似した過去の資料を提案：AIが必要だと判断したキーワードから検索する。
+ - AIとチャット：string（利用するフォーマットが含まれる場合も）。
+
+**Response**
  - 200 OK 
      - 資料のURLリスト：text[]
      - AIが作成したフォーマット：text 
--400 Bad Request 
+- 400 Bad Request 
   - 入力データがありませんでした
--500 ServerError 
-  -  サーバーエラー 
+- 500 ServerError 
+  - サーバーエラー 
 ## データモデル設計
 ### テーブル設計
 ```mermaid
@@ -223,6 +251,7 @@ erDiagram
     datetime submitted_at "申請日時"
     string applicant_name "申請者"
     string status "状態"
+    string url "ファイルURL"
     string content_text "申請内容"
   }
 
@@ -231,6 +260,7 @@ erDiagram
     int event_id FK "イベントID"
     string channel "媒体(SNS/チラシ等)"
     datetime posted_at "投稿日"
+    string url "ファイルURL"
     string content_text "宣伝文"
   }
 
@@ -239,6 +269,7 @@ erDiagram
     int event_id FK "イベントID"
     string role "役割"
     string status "状態"
+    string url "ファイルURL"
     string content_text "連絡文"
   }
 
